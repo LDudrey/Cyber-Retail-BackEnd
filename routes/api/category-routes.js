@@ -32,38 +32,35 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST/CREATE a new category
-router.post('/', (req, res) => {
-  Category.create({
-    category_name: req.body.category_name
-  })
-    .then((newCat) => {
-      res.status(200).json(newCat);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
+router.post('/', async (req, res) => {
+  try {
+    const newCat = await Category.create({
+      category_name: req.body.category_name,
     });
+    res.status(200).json(newCat);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
 });
 
 // PUT/UPDATE category by its 'id' value
-router.put('/:id', (req, res) => {
-  Category.update(
-    {
-      category_name: req.body.category_name
-    },
-    {
-      where: {
-        id: req.params.id,
+router.put('/:id', async (req, res) => {
+  try {
+    Category.update(
+      {
+        category_name: req.body.category_name
       },
-    }
-  )
-    .then((upCat) => {
-      res.status(200).json(upCat);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
-    });
+      {
+        where: {
+          id: req.params.id,
+        },
+      });
+    res.status(200).json(upCat);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
 });
 
 // DELETE a category by its 'id' value
